@@ -14,16 +14,16 @@ def is_override(key_attr_name, code):
 def main():
     from blessed import Terminal
     term = Terminal()
-    csv_header = """
+    fname = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), os.pardir, 'docs', 'all_the_keys.txt'))
+    with open(fname, 'w') as fout:
+        print(f"write: {fout.name}")
+        csv_header = """
 .. csv-table:: All Terminal class attribute Keyboard codes, by name
    :delim: |
    :header: "Name", "Value", "Example Sequence(s)"
 
 """
-    fname = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), os.pardir, 'docs', 'all_the_keys.txt'))
-    with open(fname, 'w') as fout:
-        print(f"write: {fout.name}")
         fout.write(csv_header)
         for key_attr_name in sorted([
                 attr for attr in dir(term) if attr.startswith('KEY_')
@@ -34,10 +34,12 @@ def main():
                 if maybe_digit.isdigit() and int(maybe_digit) > 23:
                     continue
             code = getattr(term, key_attr_name)
-            repr_sequences = []
-            for (seq, value) in DEFAULT_SEQUENCE_MIXIN:
-                if value == code:
-                    repr_sequences.append(repr(seq))
+            repr_sequences = [
+                repr(seq)
+                for (seq, value) in DEFAULT_SEQUENCE_MIXIN
+                if value == code
+            ]
+
             txt_sequences = ', '.join(repr_sequences).replace('\\', '\\\\')
             fout.write(f'    {key_attr_name} | {code}')
             if txt_sequences:

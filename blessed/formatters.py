@@ -285,8 +285,7 @@ class NullCallableString(six.text_type):
 
     def __new__(cls):
         """Class constructor."""
-        new = six.text_type.__new__(cls, u'')
-        return new
+        return six.text_type.__new__(cls, u'')
 
     def __call__(self, *args):
         """

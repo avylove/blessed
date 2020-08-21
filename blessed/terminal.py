@@ -173,13 +173,10 @@ class Terminal(object):
             self._kind = kind or os.environ.get('TERM', 'dumb') or 'dumb'
 
         self._does_styling = False
-        if force_styling:
+        if not force_styling and self.is_a_tty and force_styling is None:
+            self.errors.append('force_styling is None')
+        elif self.is_a_tty or force_styling:
             self._does_styling = True
-        elif self.is_a_tty:
-            if force_styling is None:
-                self.errors.append('force_styling is None')
-            else:
-                self._does_styling = True
 
         if self.does_styling:
             # Initialize curses (call setupterm), so things like tigetstr() work.
@@ -1142,9 +1139,15 @@ class Terminal(object):
         lines = []
         for line in text.splitlines():
             lines.extend(
-                (_linewrap for _linewrap in SequenceTextWrapper(
-                    width=width, term=self, **kwargs).wrap(line))
-                if line.strip() else (u'',))
+                iter(
+                    SequenceTextWrapper(width=width, term=self, **kwargs).wrap(
+                        line
+                    )
+                )
+                if line.strip()
+                else (u'',)
+            )
+
 
         return lines
 

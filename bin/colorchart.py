@@ -70,9 +70,9 @@ def draw_chart(term):
 def color_chart(term):
     """Main color chart application."""
     term = blessed.Terminal()
-    algo_idx = 0
     dirty = True
     with term.cbreak(), term.hidden_cursor(), term.fullscreen():
+        algo_idx = 0
         while True:
             if dirty:
                 draw_chart(term)
@@ -80,7 +80,7 @@ def color_chart(term):
             dirty = True
             if inp in '[]':
                 algo_idx += 1 if inp == ']' else -1
-                algo_idx = algo_idx % len(ALGORITHMS)
+                algo_idx %= len(ALGORITHMS)
                 term.color_distance_algorithm = ALGORITHMS[algo_idx]
             elif inp == '\x0c':
                 pass

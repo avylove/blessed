@@ -178,10 +178,7 @@ class SequenceTextWrapper(textwrap.TextWrapper):
         while chunks:
             cur_line = []
             cur_len = 0
-            if lines:
-                indent = self.subsequent_indent
-            else:
-                indent = self.initial_indent
+            indent = self.subsequent_indent if lines else self.initial_indent
             width = self.width - len(indent)
             if drop_whitespace and (
                     Sequence(chunks[-1], term).strip() == '' and lines):

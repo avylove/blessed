@@ -22,12 +22,12 @@ def main():
     assert term.hpa(1) != u'', (
         'Terminal does not support hpa (Horizontal position absolute)')
 
-    col, offset = 1, 1
     with term.cbreak():
         inp = None
         print("press 'X' to stop.")
         sys.stderr.write(term.move_yx(term.height, 0) + u'[')
         sys.stderr.write(term.move_x(term.width - 1) + u']' + term.move_x(1))
+        col, offset = 1, 1
         while inp != 'X':
             if col >= (term.width - 2):
                 offset = -1

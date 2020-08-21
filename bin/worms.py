@@ -172,9 +172,10 @@ def nibble_locations(nibble_location, nibble_value):
     """Return array of locations for the current "nibble"."""
     # generate an array of locations for the current nibble's location
     # -- a digit such as '123' may be hit at 3 different (y, x) coordinates.
-    return [Location(x=nibble_location.x + offset,
-                     y=nibble_location.y)
-            for offset in range(0, 1 + len('{}'.format(nibble_value)) - 1)]
+    return [
+        Location(x=nibble_location.x + offset, y=nibble_location.y)
+        for offset in range(1 + len('{}'.format(nibble_value)) - 1)
+    ]
 
 
 def main():
@@ -196,11 +197,11 @@ def main():
 
     # speed is actually a measure of time; the shorter, the faster.
     speed = 0.1
-    modifier = 0.93
     inp = None
 
     echo(term.move_yx(term.height, 0))
     with term.hidden_cursor(), term.cbreak(), term.location():
+        modifier = 0.93
         while inp not in (u'q', u'Q'):
 
             # delete the tail of the worm at worm_length
